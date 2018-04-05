@@ -1,25 +1,39 @@
 import socket
+
+sPORT = 3000
+
+
 class Server:
-    def __init__(self):
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.ip = "192.168.0.22"
+    def __init__(self, ip):
+        self.sock = socket.socket()
+        self.ip = ip
         self.buf = 1024
-        
-    def iniciar(self,port):
-        addr = (self.ip,port)
+
+    def iniciar(self, port):
+        addr = (self.ip, port)
         self.sock.bind(addr)
-        
+        self.sock.listen(1)
+        conn, addre = self.sock.accept()
+        print("Connection from: " + str(addre))
         while True:
-            msg,cliente = self.sock.recvfrom(self.buf)
-            print(msg)
-            if(data == "sair"):
+            msg = conn.recv(self.buf).decode()
+            print(str(msg))
+            # self.sock.send(msg.encode())
+            # conn.send(msg.encode())
+            if(msg == "sair"):
                 break
         self.sock.close()
 
+
 def main():
-    servidor = Server()
-    servidor.iniciar(5000)
+    ip = input("Digite o ip do server: ")
+    if(ip.count(".") != 3):
+        print("Entrada inválida")
+        main()
+    else:
+        servidor = Server(ip)
+        servidor.iniciar(sPORT)
+
+
 if __name__ == "__main__":
     main()
-        
-        
