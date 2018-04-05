@@ -1,10 +1,17 @@
 # The main formula is A = (G**a) % P
 # To get the final key you use the same formula, with different variables S = (A**a) % P
-
+from Cliente import *
 
 def apply_dh_formula(G, a, P):
     return (G**a) % P
 
+def conectar():
+    ip = input("Digite o ip para qual se conectar: ")
+    if(ip.count(".") != 4):
+        print("Entrada inválida")
+        receberIp()
+    else:
+        novo_cliente = Cliente().conectar(sPORT,ip)
 
 def main():
     # Variables to Test, it will be sent in the communication
@@ -42,6 +49,6 @@ def main():
     A = apply_dh_formula(LOCAL_G, LOCAL_a, LOCAL_P)
     print(A)
 
-
+    conectar()
 if __name__ == "__main__":
     main()
