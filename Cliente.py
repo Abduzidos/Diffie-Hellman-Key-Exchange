@@ -1,31 +1,35 @@
 import socket
 PROMPT = ">>"
-#porta padrão definida para comunicação
-sPORT = 5000
+# porta padrão definida para comunicação
+sPORT = 3000
+
 
 class Cliente:
     def __init__(self):
-        #inicializa soquete
-        self.sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
- 
-    def conectar(self,ip,porta):
-        addr = (ip,porta)
-        self.sock.bind(addr)
+        # inicializa soquete
+        self.sock = socket.socket()
+
+    def conectar(self, ip, porta):
+        addr = (ip, porta)
+        print(ip)
+        print(porta)
+        self.sock.connect(addr)
         while True:
             msg = input(PROMPT)
-            self.sock.sendto(msg.encode(),addr)
+            self.sock.send(msg.encode())
             if(msg == "sair"):
                 break
         self.sock.close()
 
 
 def main():
-    
-    cliente = Cliente()
-    cliente.conectar(ip,sPORT)
+    ip = input("Digite o ip para qual se conectar: ")
+    if(ip.count(".") != 3):
+        print("Entrada inválida")
+        main()
+    else:
+        novo_cliente = Cliente().conectar(ip, sPORT)
+
 
 if __name__ == "__main__":
     main()
-
-
-    

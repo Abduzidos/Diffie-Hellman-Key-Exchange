@@ -9,9 +9,9 @@ def apply_dh_formula(G, a, P):
 
 def conectar():
     ip = input("Digite o ip para qual se conectar: ")
-    if(ip.count(".") != 4):
+    if(ip.count(".") != 3):
         print("Entrada inválida")
-        receberIp()
+        conectar()
     else:
         novo_cliente = Cliente().conectar(sPORT, ip)
 
