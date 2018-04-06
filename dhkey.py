@@ -124,12 +124,12 @@ class Sender(threading.Thread):
 
 def main():
     global a
-    # my_host = input("My HOST: ")
-    my_host = 'localhost'
+    my_host = input("My HOST: ")
+    #my_host = 'localhost'
     my_port = int(input("My PORT: "))
     receiver = Receiver(my_host, my_port)
-    #my_friends_host = input("Peer's HOST: ")
-    my_friends_host = 'localhost'
+    my_friends_host = input("Peer's HOST: ")
+    #my_friends_host = 'localhost'
     my_friends_port = int(input("Peer's PORT: "))
     a = int(input('Choose a number to be your local private key (the little a): '))
     sender = Sender(my_friends_host, my_friends_port)
