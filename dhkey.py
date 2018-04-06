@@ -6,6 +6,8 @@ a = 0
 flag = 0
 ENCODING = 'utf-8'
 
+from nums import primeNumbers
+
 
 class Receiver(threading.Thread):
     def __init__(self, my_host, my_port):
@@ -40,6 +42,7 @@ class Receiver(threading.Thread):
                     if "G: " in full_message and LOCAL_G == 0:
                         LOCAL_G = full_message.split('G: ')
                         LOCAL_G = int(LOCAL_G[-1])
+                        LOCAL_G = primeNumbers[LOCAL_G]
                         #print("MEU LOCAL G")
                         # print(LOCAL_G)
                         full_message = ""
@@ -47,6 +50,7 @@ class Receiver(threading.Thread):
                     if "P: " in full_message and LOCAL_P == 0:
                         LOCAL_P = full_message.split('P: ')
                         LOCAL_P = int(LOCAL_P[-1])
+                        LOCAL_P = primeNumbers[LOCAL_P]
                         #print("MEU LOCAL P")
                         # print(LOCAL_P)
                         full_message = ""
@@ -57,6 +61,7 @@ class Receiver(threading.Thread):
                         #print("MEU REMOTE A")
                         # print(REMOTE_A)
                         full_message = ""
+                        print("Processing my key...")
                         S = self.apply_dh_formula(REMOTE_A, a, LOCAL_P)
                         print("MY SECURITY KEY IS:", S)
 
@@ -90,6 +95,7 @@ class Sender(threading.Thread):
                 s.connect((self.host, self.port))
                 s.sendall(message.encode(ENCODING))
                 LOCAL_P = int(message.strip('P: '))
+                LOCAL_P = primeNumbers[LOCAL_P]
                 # s.shutdown(2)
                 s.close()
             if "G: " in message:
@@ -97,6 +103,7 @@ class Sender(threading.Thread):
                 s.connect((self.host, self.port))
                 s.sendall(message.encode(ENCODING))
                 LOCAL_G = int(message.strip('G: '))
+                LOCAL_G = primeNumbers[LOCAL_G]
                 # s.shutdown(2)
                 s.close()
 
@@ -104,6 +111,7 @@ class Sender(threading.Thread):
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 s.connect((self.host, self.port))
                 s.sendall(message.encode(ENCODING))
+                print("Processing the A...")
                 A = self.apply_dh_formula(LOCAL_G, a, LOCAL_P)
                 flag = 1
                 A_TOSEND = "A: " + str(A)
