@@ -40,6 +40,7 @@ class Receiver(threading.Thread):
                         full_message = ""
                         break
                     if "G: " in full_message and LOCAL_G == 0:
+                        print("Received the remote G")
                         LOCAL_G = full_message.split('G: ')
                         LOCAL_G = int(LOCAL_G[-1])
                         LOCAL_G = primeNumbers[LOCAL_G]
@@ -48,6 +49,7 @@ class Receiver(threading.Thread):
                         full_message = ""
 
                     if "P: " in full_message and LOCAL_P == 0:
+                        print("Received the remote P")
                         LOCAL_P = full_message.split('P: ')
                         LOCAL_P = int(LOCAL_P[-1])
                         LOCAL_P = primeNumbers[LOCAL_P]
@@ -56,14 +58,18 @@ class Receiver(threading.Thread):
                         full_message = ""
 
                     if "A: " in full_message and REMOTE_A == 0:
+                        print("Received the remote A")
                         REMOTE_A = full_message.split('A: ')
                         REMOTE_A = int(REMOTE_A[-1])
+                        print("")
                         #print("MEU REMOTE A")
                         # print(REMOTE_A)
                         full_message = ""
                         print("Processing my key...")
                         S = self.apply_dh_formula(REMOTE_A, a, LOCAL_P)
                         print("MY SECURITY KEY IS:", S)
+                        print(
+                            "This key is only LOCAL and was not sent in the communication")
 
             finally:
                 # connection.shutdown(2)
@@ -116,6 +122,7 @@ class Sender(threading.Thread):
                 flag = 1
                 A_TOSEND = "A: " + str(A)
                 #s.sendall("A: ".encode(ENCODING))
+                print("Sending the A...")
                 s.sendall(A_TOSEND.encode(ENCODING))
                 ALREADY_SENT = 1
                 # s.shutdown(2)
@@ -131,7 +138,8 @@ def main():
     my_friends_host = input("Peer's HOST: ")
     #my_friends_host = 'localhost'
     my_friends_port = int(input("Peer's PORT: "))
-    a = int(input('Choose a number to be your local private key (the little a): '))
+    a = int(input("Choose a number to be your local private key (the little a): "))
+    print("Choose the G and the P between 0 to 99 and type such as G: 10 P: 20")
     sender = Sender(my_friends_host, my_friends_port)
     treads = [receiver.start(), sender.start()]
 
